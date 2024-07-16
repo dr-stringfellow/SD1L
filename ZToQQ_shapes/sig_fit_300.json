@@ -1,0 +1,29 @@
+{
+    "alpha2": 0.7493387636059756, 
+    "script_options": {
+        "masses": [
+            200, 
+            250, 
+            300
+        ], 
+        "inputFiles": [
+            "/eos/home-m/matteomi/l1ScoutingData/fitting/zm200/zm200.h5", 
+            "/eos/home-m/matteomi/l1ScoutingData/fitting/zm250/zm250.h5", 
+            "/eos/home-m/matteomi/l1ScoutingData/fitting/zm300/zm300.h5"
+        ], 
+        "fitRange": 0.8, 
+        "dcbModel": true, 
+        "outDir": "ZToQQ_shapes/"
+    }, 
+    "alpha2-err": 0.00780092327060028, 
+    "sign-err": 0.013588221412760504, 
+    "sign": 120.37348477517278, 
+    "sign2-err": 44.64890356755192, 
+    "alpha-err": 0.00474826780309523, 
+    "sign2": 49.99943844781619, 
+    "mean-err": 0.4776553183755823, 
+    "alpha": 0.35312530108352136, 
+    "sigma": 29.99999953657337, 
+    "sigma-err": 0.07175559669091847, 
+    "mean": 293.5009531910239
+}
