@@ -132,7 +132,7 @@ def dijetfit(options):
         os.system("rm %s" % plot_dir + "fit_results_{}.json".format(options.mass))
 
     fine_bin_size = 5
-    mass = options.mass 
+    mass = options.mass
 
     binsx = [150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 350, 370, 390, 410,
              430, 450, 470, 490, 510, 530, 550, 570, 590, 610, 630, 650, 670, 690,
@@ -140,13 +140,13 @@ def dijetfit(options):
 
 
     binsx = [options.mjj_min+i*int((options.mjj_max-options.mjj_min)/options.nbinsx) for i in range(options.nbinsx)]
-    
 
-    if(options.mjj_max < 0. and options.rebin): 
+
+    if(options.mjj_max < 0. and options.rebin):
         options.mjj_max = get_mjj_max(options.inputFile) + 5.0
         options.mjj_max = max(1.2*options.mass, options.mjj_max)
     #print("MJJ MAX %.2f" % options.mjj_max)
-    
+
     if(options.mjj_min > 0 and options.mjj_min < binsx[-1]):
         start_idx = 0
         while(binsx[start_idx] < options.mjj_min):
@@ -162,7 +162,7 @@ def dijetfit(options):
     if(options.mjj_max > 0 and options.mjj_max < binsx[-1]):
         print("rebinning with max mjj %.2f" % options.mjj_max)
         end_idx = len(binsx)-1
-        while(binsx[end_idx]   > options.mjj_max and end_idx > 0): 
+        while(binsx[end_idx]   > options.mjj_max and end_idx > 0):
             end_idx -=1
         binsx = binsx[:end_idx]
 
@@ -183,13 +183,13 @@ def dijetfit(options):
     nbins_fine = int(binsx[-1] - binsx[0])/fine_bin_size
 
     histos_sb = ROOT.TH1F("mjj_sb", "mjj_sb" ,nbins_fine, binsx[0], binsx[-1])
-    
-    
+
+
     load_h5_sb(options.inputFile, histos_sb,fraction=options.fraction)
     print("************ Found %i total events \n" % histos_sb.GetEntries())
     print(histos_sb.Integral())
 
-    
+
 
     if(options.rebin):
         bins_nonzero = get_rebinning(binsx, histos_sb)
@@ -219,6 +219,7 @@ def dijetfit(options):
     print("\n\n ############# FIT BACKGROUND AND SAVE PARAMETERS ###########")
     #nParsToTry = [2, 3, 4, 5]
 
+    # nParsToTry = [2, 3, 4, 5, 6]
     nParsToTry = [2, 3, 4, 5, 6]
     #nParsToTry = [2]
     chi2s = [0]*len(nParsToTry)
@@ -245,11 +246,12 @@ def dijetfit(options):
         qcd_fnames[i] = str(nPars) + 'par_qcd_fit%i.root' % i
         qcd_outfile = ROOT.TFile(qcd_fnames[i], 'RECREATE')
 
-        model_name = "model_b" + str(i)
         fitter_QCD = Fitter(['mjj_fine'], debug = False)
-        fitter_QCD.qcdShape(model_name, 'mjj_fine', nPars)
         fitter_QCD.importBinnedData(fitting_histogram, ['mjj_fine'], data_name)
-        
+
+        model_name = "model_b" + str(i)
+        fitter_QCD.qcdShape(model_name, 'mjj_fine', nPars)
+
         fres = fitter_QCD.fit(model_name, data_name, options=[ROOT.RooFit.Save(1), ROOT.RooFit.Verbose(0),  ROOT.RooFit.Minos(1), ROOT.RooFit.Minimizer("Minuit2")])
         #Running fit two times seems to improve things sometimes (better initial guesses for params?)
         fres = fitter_QCD.fit(model_name, data_name, options=[ROOT.RooFit.Save(1), ROOT.RooFit.Verbose(0),  ROOT.RooFit.Minos(1), ROOT.RooFit.Minimizer("Minuit2")])
@@ -279,20 +281,21 @@ def dijetfit(options):
         rescale = 20./ default_norm
         fit_norm = ROOT.RooFit.Normalization(rescale,ROOT.RooAbsReal.Relative)
 
-        #use toys to sample errors rather than linear method, 
+        #use toys to sample errors rather than linear method,
         #needed b/c dijet fn's usually has strong correlation of params
         linear_errors = False
 
 
         frame = mjj.frame()
-        dataset.plotOn(frame, ROOT.RooFit.Name(data_name), ROOT.RooFit.Invisible(), ROOT.RooFit.Binning(roobins), ROOT.RooFit.DataError(ROOT.RooAbsData.SumW2), 
+        dataset.plotOn(frame, ROOT.RooFit.Name(data_name), ROOT.RooFit.Invisible(), ROOT.RooFit.Binning(roobins), ROOT.RooFit.DataError(ROOT.RooAbsData.SumW2),
                 ROOT.RooFit.Rescale(rescale))
 
-        model.plotOn(frame, ROOT.RooFit.VisualizeError(fres, 1, linear_errors), ROOT.RooFit.FillColor(ROOT.kRed - 7), ROOT.RooFit.LineColor(ROOT.kRed - 7), ROOT.RooFit.Name(fres.GetName()), 
+        # model.plotOn(frame, ROOT.RooFit.VisualizeError(fres, 1, linear_errors), ROOT.RooFit.FillColor(ROOT.kRed - 7), ROOT.RooFit.LineColor(ROOT.kRed - 7), ROOT.RooFit.Name(fres.GetName()),
+        model.plotOn(frame, ROOT.RooFit.VisualizeError(fres, 1, linear_errors), ROOT.RooFit.LineColor(ROOT.kRed - 7), ROOT.RooFit.Name(fres.GetName()),
                        fit_norm)
 
         model.plotOn(frame, ROOT.RooFit.LineColor(ROOT.kRed + 1), ROOT.RooFit.Name(model_name),  fit_norm)
-        
+
 
         useBinAverage = True
         hpull = frame.pullHist(data_name, model_name, useBinAverage)
@@ -465,7 +468,7 @@ def dijetfit(options):
     print(cmd)
     os.system(cmd)
     workspace_name = 'workspace_JJ_{l1}_{l2}.root'.format(l1=label, l2=sb_label)
-    sbfit_chi2, sbfit_ndof = checkSBFit(workspace_name, sb_label, bins, label + "_" + sb_label, nPars_QCD, 
+    sbfit_chi2, sbfit_ndof = checkSBFit(workspace_name, sb_label, bins, label + "_" + sb_label, nPars_QCD,
             plot_dir = plot_dir, draw_sig = options.draw_sig, plot_label = label)
 
     sbfit_prob = ROOT.TMath.Prob(sbfit_chi2, sbfit_ndof)
@@ -526,7 +529,7 @@ def dijetfit(options):
     obs_limit = -1
     exp_limit = exp_low = exp_high = exp_two_low = exp_two_high = -1
 
-    
+
     for i in range(6):
         res2.GetEntry(i)
         if(res2.quantileExpected == -1):  # obs limit
@@ -604,7 +607,7 @@ def dijetfit(options):
     print("Saving fit results to %s" % plot_dir + "fit_results_{}.pkl".format(options.mass))
     with open(plot_dir + "fit_results_{}.pkl".format(options.mass), "w") as f:
         pickle.dump(results, f)
-        
+
     print("Also saving fit results to %s" % plot_dir + "fit_results_{}.json".format(options.mass))
     with open(plot_dir + "fit_results_{}.json".format(options.mass), "w") as jsonfile:
         json.dump(results, jsonfile, indent=4)
@@ -619,7 +622,7 @@ def fitting_options():
     parser.add_option("--res_j_unc", type=float, default=0.035,
                       help="Uncertainty on signal width from JER")
 
-    
+
     parser.add_option("--fraction", type=float, default=1.0,
                       help="Only use subset of data")
     parser.add_option("--mjj_min", type=float, default=-1.0,
