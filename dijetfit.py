@@ -60,18 +60,18 @@ def fit_signalmodel(input_file, sig_file_name, mass, x_bins, fine_bins,
     mjj_fine.setBins(len(bins_sig_fit))
 
     chi2_fine = fitter.projection("model_s", "data", "mjj_fine",
-                                  plot_dir + plot_label + "signal_fit.png")
+                                  plot_dir + plot_label + "signal_fit.png", get_fwhm=True)
 
     fitter.projection("model_s", "data", "mjj_fine",
-                      plot_dir + plot_label +  "signal_fit_log.png", 0, True)
+                      plot_dir + plot_label +  "signal_fit_log.png", 0, True, get_fwhm=True)
 
     chi2 = fitter.projection("model_s", "data", "mjj_fine",
                              plot_dir + plot_label + "signal_fit_binned.png",
-                             roobins_sig_fit)
+                             roobins_sig_fit, get_fwhm=True)
 
     fitter.projection("model_s", "data", "mjj_fine",
                       plot_dir + plot_label + "signal_fit_log_binned.png",
-                      roobins_sig_fit, logy=True)
+                      roobins_sig_fit, logy=True, get_fwhm=True)
 
     sig_outfile.cd()
     histos_sig.Write()

@@ -397,4 +397,5 @@ class DataCardMaker:
         elif nPars==6: model = ROOT.RooGenericPdf(pdfName, "(0.5*tanh((@0-@6)/@5) + .5)*pow(1-@0/13000., @1)/ ( pow(@0/13000., @2+@3*log(@0/13000.)+@4*pow(log(@0/13000.),2)) )",
                 ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1"), self.w.var("CMS_JJ_p2"), self.w.var("CMS_JJ_p3"), self.w.var("CMS_JJ_p4"), self.w.var("CMS_JJ_p5"), self.w.var("CMS_JJ_p6")))
 
-        getattr(self.w,'import')(model,ROOT.RooFit.Rename(pdfName))
+        getattr(self.w,'import')(model)
+        # getattr(self.w,'import')(model, ROOT.RooFit.Rename(pdfName))

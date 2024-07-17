@@ -121,7 +121,7 @@ class Fitter(object):
         self.legend.SetMargin(0.35)
         return self.legend
 
-    def projection(self,model = "model",data="data",poi="x",filename="fit.root",binning=0,logy=False,xtitle='x',mass=1000):
+    def projection(self,model = "model",data="data",poi="x",filename="fit.root",binning=0,logy=False,xtitle='x',mass=1000, get_fwhm=False):
 
         self.frame=self.w.var(poi).frame()
 
@@ -148,11 +148,23 @@ class Fitter(object):
                 self.w.pdf(model).plotOn(self.frame,ROOT.RooFit.VisualizeError(fr,1, linear_errors), ROOT.RooFit.LineColor(ROOT.kRed-7),ROOT.RooFit.Name(fr.GetName()))
                 self.w.pdf(model).plotOn(self.frame,ROOT.RooFit.LineColor(ROOT.kRed+1))
 
+        if fr and get_fwhm:
+            print("Creating histogram")
+            histo = self.w.pdf(model).createHistogram("test_histo", self.w.var(poi))
+            print("Created")
+            bin1 = histo.FindFirstBinAbove(histo.GetMaximum() / 2.);
+            bin2 = histo.FindLastBinAbove(histo.GetMaximum() / 2.);
+            fwhm = histo.GetBinCenter(bin2) - histo.GetBinCenter(bin1);
+            print("FWHM: %s" % round(fwhm, 2))
+            del histo
+
         if binning: self.w.data(data).plotOn(self.frame,ROOT.RooFit.Binning(binning))
         else: self.w.data(data).plotOn(self.frame)
 
         self.legend = self.getLegend()
         self.legend.AddEntry( self.w.pdf(model)," Full PDF","l")
+        if fr and get_fwhm:
+            self.legend.AddEntry(0, "FWHM: %s" % round(fwhm, 2), "")
 
         self.c=ROOT.TCanvas("c","c")
         if logy:
