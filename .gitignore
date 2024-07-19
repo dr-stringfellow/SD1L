@@ -1,2 +1,5 @@
 *.pyc
 cache*.root
+*.out
+*.root
+datacard_*.txt

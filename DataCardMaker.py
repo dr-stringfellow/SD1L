@@ -185,7 +185,7 @@ class DataCardMaker:
             resolutionStr=resolutionStr+"+{factor}*{syst}".format(factor=factor,syst=syst)
             resolutionSysts.append(syst)
 
-        self.w.factory(variable+"[0,13000]")
+        self.w.factory(variable+"[0,13600]")
 
         f = ROOT.TFile(jsonFile,'READ')
         meanG = f.Get('mean')
@@ -269,7 +269,7 @@ class DataCardMaker:
             resolutionStr=resolutionStr+"+{factor}*{syst}".format(factor=factor,syst=syst)
             resolutionSysts.append(syst)
 
-        self.w.factory(variable+"[0,13000]")
+        self.w.factory(variable+"[0,13600]")
 
         f = ROOT.TFile(jsonFile,'READ')
         meanG = f.Get('mean')
@@ -348,16 +348,16 @@ class DataCardMaker:
             print i,pName,pars_val[i-1],parsG[i-1].GetErrorYhigh(0),parsG[i-1].GetErrorYlow(0),errUp,errDown
             self.w.factory("{name}[{val},{errDown},{errUp}]".format(name=pName,val=pars_val[i-1],errUp=errUp,errDown=errDown))
 
-        if nPars==2: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13000., @1)/pow(@0/13000., @2)",
+        if nPars==2: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13600., @1)/pow(@0/13600., @2)",
                 ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1_%s"%self.tag), self.w.var("CMS_JJ_p2_%s"%self.tag)))
-        elif nPars==3: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13000., @1)/pow(@0/13000., @2+@3*log(@0/13000.))",
+        elif nPars==3: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13600., @1)/pow(@0/13600., @2+@3*log(@0/13600.))",
             ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1_%s"%self.tag), self.w.var("CMS_JJ_p2_%s"%self.tag), self.w.var("CMS_JJ_p3_%s"%self.tag)))
-        elif nPars==4: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13000., @1)/ ( pow(@0/13000., @2+@3*log(@0/13000.)+@4*pow(log(@0/13000.),2)) )",
+        elif nPars==4: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13600., @1)/ ( pow(@0/13600., @2+@3*log(@0/13600.)+@4*pow(log(@0/13600.),2)) )",
             ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1_%s"%self.tag), self.w.var("CMS_JJ_p2_%s"%self.tag), self.w.var("CMS_JJ_p3_%s"%self.tag), self.w.var("CMS_JJ_p4_%s"%self.tag)))
-        elif nPars==5: model = ROOT.RooGenericPdf(pdfName, "pow(exp(-@0/13000.),@5) * pow(1-@0/13000., @1)/ ( pow(@0/13000., @2+@3*log(@0/13000.)+@4*pow(log(@0/13000.),2)) )",
+        elif nPars==5: model = ROOT.RooGenericPdf(pdfName, "pow(exp(-@0/13600.),@5) * pow(1-@0/13600., @1)/ ( pow(@0/13600., @2+@3*log(@0/13600.)+@4*pow(log(@0/13600.),2)) )",
             ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1_%s"%self.tag), self.w.var("CMS_JJ_p2_%s"%self.tag), self.w.var("CMS_JJ_p3_%s"%self.tag),
                 self.w.var("CMS_JJ_p4_%s"%self.tag), self.w.var("CMS_JJ_p5_%s"%self.tag) ))
-        elif nPars==6: model = ROOT.RooGenericPdf(pdfName, "(0.5*tanh((@0-@6)/@5) + .5)*pow(1-@0/13000., @1)/ ( pow(@0/13000., @2+@3*log(@0/13000.)+@4*pow(log(@0/13000.),2)) )",
+        elif nPars==6: model = ROOT.RooGenericPdf(pdfName, "(0.5*tanh((@0-@6)/@5) + .5)*pow(1-@0/13600., @1)/ ( pow(@0/13600., @2+@3*log(@0/13600.)+@4*pow(log(@0/13600.),2)) )",
                 ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1_%s"%self.tag), self.w.var("CMS_JJ_p2_%s"%self.tag), self.w.var("CMS_JJ_p3_%s"%self.tag),
                 self.w.var("CMS_JJ_p4_%s"%self.tag), self.w.var("CMS_JJ_p5_%s"%self.tag), self.w.var("CMS_JJ_p6_%s"%self.tag)))
 
@@ -387,14 +387,14 @@ class DataCardMaker:
             print i,pName,pars_val[i-1].value,parsG[i-1].GetErrorYhigh(0),parsG[i-1].GetErrorYlow(0),errUp,errDown
             self.w.factory("{name}[{val},{errDown},{errUp}]".format(name=pName,val=pars_val[i-1].value,errUp=errUp,errDown=errDown))
 
-        if nPars==2: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13000., @1)/pow(@0/13000., @2)", ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1"), self.w.var("CMS_JJ_p2")))
-        elif nPars==3: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13000., @1)/pow(@0/13000., @2+@3*log(@0/13000.))",
+        if nPars==2: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13600., @1)/pow(@0/13600., @2)", ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1"), self.w.var("CMS_JJ_p2")))
+        elif nPars==3: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13600., @1)/pow(@0/13600., @2+@3*log(@0/13600.))",
                 ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1"), self.w.var("CMS_JJ_p2"), self.w.var("CMS_JJ_p3")))
-        elif nPars==4: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13000., @1)/ ( pow(@0/13000., @2+@3*log(@0/13000.)+@4*pow(log(@0/13000.),2)) )",
+        elif nPars==4: model = ROOT.RooGenericPdf(pdfName, "pow(1-@0/13600., @1)/ ( pow(@0/13600., @2+@3*log(@0/13600.)+@4*pow(log(@0/13600.),2)) )",
                 ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1"), self.w.var("CMS_JJ_p2"), self.w.var("CMS_JJ_p3"), self.w.var("CMS_JJ_p4")))
-        elif nPars==5: model = ROOT.RooGenericPdf(pdfName, " pow(exp(-@0/13000.), @4) * pow(1-@0/13000., @1)/ ( pow(@0/13000., @2+@3*log(@0/13000.)+@4*pow(log(@0/13000.),2)) )",
+        elif nPars==5: model = ROOT.RooGenericPdf(pdfName, " pow(exp(-@0/13600.), @4) * pow(1-@0/13600., @1)/ ( pow(@0/13600., @2+@3*log(@0/13600.)+@4*pow(log(@0/13600.),2)) )",
                 ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1"), self.w.var("CMS_JJ_p2"), self.w.var("CMS_JJ_p3"), self.w.var("CMS_JJ_p4"), self.w.var("CMS_JJ_p5")))
-        elif nPars==6: model = ROOT.RooGenericPdf(pdfName, "(0.5*tanh((@0-@6)/@5) + .5)*pow(1-@0/13000., @1)/ ( pow(@0/13000., @2+@3*log(@0/13000.)+@4*pow(log(@0/13000.),2)) )",
+        elif nPars==6: model = ROOT.RooGenericPdf(pdfName, "(0.5*tanh((@0-@6)/@5) + .5)*pow(1-@0/13600., @1)/ ( pow(@0/13600., @2+@3*log(@0/13600.)+@4*pow(log(@0/13600.),2)) )",
                 ROOT.RooArgList(self.w.var(MVV), self.w.var("CMS_JJ_p1"), self.w.var("CMS_JJ_p2"), self.w.var("CMS_JJ_p3"), self.w.var("CMS_JJ_p4"), self.w.var("CMS_JJ_p5"), self.w.var("CMS_JJ_p6")))
 
         getattr(self.w,'import')(model)
